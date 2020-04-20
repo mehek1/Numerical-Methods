@@ -1,0 +1,45 @@
+import numpy as np
+import scipy.linalg
+np.set_printoptions(formatter={'float': '{: 0.2f}'.format})
+
+table = np.zeros((12,6))
+for i in range(0,np.size(table,0)):
+    n = i+2
+
+    #first column, Hilber matrix, analytical solution, RHS
+    table[i,0] = int(n)
+    A = scipy.linalg.hilbert(n)
+    x = np.zeros((n, 1))
+    x[0,0] = 1
+    x[-1,0] = 1
+    b = A[:,0] + A[:,n-1]
+
+    #second column
+    table[i,1] = np.linalg.cond(A, p=np.inf)*10e-17
+
+    #third column, using linalg.solce
+    XB = np.linalg.solve(A,b)
+    toprelnum3 = np.linalg.norm((x-XB).T,ord = np.inf)
+    botrelnum3 = np.linalg.norm(x.T,ord = np.inf)
+    table[i,2] = toprelnum3/botrelnum3
+
+    #fourth column, solving Ly=P^Tb and Ux=y
+    P, L, U = scipy.linalg.lu(A)
+    y = np.linalg.solve(L, np.matmul( P.T, b))
+    XLU = np.linalg.solve(U, y)
+    toprelnum4 = np.linalg.norm((x-XLU).T,ord = np.inf)
+    botrelnum4 = np.linalg.norm(x.T,ord = np.inf)
+    table[i,3] = toprelnum4/botrelnum4
+
+    #filth column, solving Ly=b and L^Tx=y
+    L = np.linalg.cholesky(A)
+    y = np.linalg.solve(L, b)
+    XCHOL = np.linalg.solve(L.T, y)
+    toprelnum5 = np.linalg.norm((x-XCHOL).T,ord = np.inf)
+    botrelnum5 = np.linalg.norm(x.T,ord = np.inf)
+    table[i,4] = toprelnum5/botrelnum5
+
+    #sixth column need to subtract,  Ax_cholesky -b
+    C6 = np.linalg.norm(np.matmul(A,XCHOL)-b,ord = 1)
+    table[i,5] = C6
+print(table)
