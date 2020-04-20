@@ -1,0 +1,19 @@
+import numpy as np
+A = np.array([[3,5,1],[6,8,6],[12,26,-7]])
+
+def LuDecomp(A):
+    n = len(A)
+    U = A
+    L = np.identity(n) #identity matrix
+    
+    for j in range(n): #column
+        for k in range(j+1,n): #row
+            L[k][j] = U[k][j]/U[j][j]
+            U[k] = U[k] - L[k][j]*U[j]
+    return L,U
+    
+    
+        
+L,U = LuDecomp(A)
+print(L)
+print(U)
