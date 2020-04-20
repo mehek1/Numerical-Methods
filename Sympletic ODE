@@ -1,0 +1,53 @@
+Comparing Euler explicit, Euler implicit and Leapfrog
+ODE: u'' = - u   u(0)=1  u'(0)=0
+sol: u = cos(t)
+"""
+import numpy as np
+import matplotlib
+import matplotlib.pyplot as plt
+import matplotlib.animation as ani
+
+def main():
+    #constants and initializations
+    t0 = 0
+    tend = 20*np.pi
+    n = 20*32
+    h = (tend-t0)/(n-1)  # stepsize
+    u = np.zeros(n)
+    v = np.zeros(n)
+    t = np.linspace(t0,tend,n)
+    #initial position and initial velocity
+    u[0] = 1
+    v[0] = 0
+
+    # solve ODE using Euler explicit
+    for i in range(n-1):
+        u[i+1] = u[i]+h*v[i]
+        v[i+1] = v[i]-h*u[i]
+
+    plot_animation(t,u,v)
+
+# function definitions
+def plot_animation(t,u,v):
+
+    fig = plt.figure()
+    plt.plot(np.cos(t),np.sin(t))
+    plt.xlim(-2, 2)
+    plt.ylim(-2, 2)
+    plt.xlabel('$u$')
+    plt.ylabel('$v$')
+    plt.title("Harmonic Oscillator $u''=-u, u(0)=1, u'(0)=0,  u=cos(t)$")
+
+    line, = plt.plot([], [], 'r-')
+    n = len(t)
+    line_ani = ani.FuncAnimation(fig, update_line, n, fargs=(u,v, line) ,
+                interval=50, blit=True ) # makes it faster
+    plt.show()
+
+def update_line(n, u,v, line):
+    line.set_data(u[:n],v[:n])
+    return line,
+
+
+if __name__ == "__main__":
+    main()
