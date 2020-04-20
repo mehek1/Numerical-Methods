@@ -1,0 +1,35 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
+x = np.linspace(-np.pi,np.pi,360)
+
+f1 = 1+np.cos(x)*np.cosh(x)
+
+plt.plot(x, f1)
+plt.show()
+
+def f(x):
+    return 1 + np.cos(x)*np.cosh(x)
+
+def FalsePosition(l,r, tol): 
+    regulafalsi_last = r
+    while(True):
+        regulafalsi = (l * f(r)-r*f(l))/(f(r)-f(l))
+        if (f(regulafalsi) * f(l)>0):
+            l = regulafalsi 
+        else: 
+            r = regulafalsi
+        
+        if(abs(regulafalsi_last-regulafalsi)<tol):
+           print(regulafalsi_last-regulafalsi)
+           break
+        regulafalsi_last = regulafalsi
+        
+    return regulafalsi
+
+l = 1.1
+r = 2.0
+tol = 1E-06
+  
+regulafalsi = FalsePosition(l,r,tol)
+print(regulafalsi)
