@@ -1,0 +1,77 @@
+#Homework 1, question D plotting 
+# importing the required module/library
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+
+
+
+#linestyle
+plt.style.use('bmh')
+
+# defining x and y values
+x = np.arange(0, 1.1, 0.00002)
+plt.yticks(np.arange(-2, 3, 1))
+plt.xticks(np.arange(0, 1.1, 0.1))
+
+#setting y and x axis values
+plt.ylim(-2, 2,)
+plt.xlim(0,1, 0.1)
+
+
+# defining y values
+a = np.sin(5*x)
+b = np.cos(5*x)
+
+
+
+# plot points
+plt.plot(x, a)
+plt.plot(x, b)
+
+
+#x-axis label
+plt.xlabel('x')
+
+#y-axis label
+plt.ylabel('y')
+
+#plot title 
+plt.title('y=sin(5x) and y=cos(5x)')
+
+#showing the plot
+plt.show()
+
+#new graph
+
+plt.style.use('_classic_test')
+
+# defining x and y values
+x = np.arange(-3, 3, 0.0002)
+
+#setting y and x axis values
+plt.ylim(-1.5, 1.5)
+plt.xlim(-3, 3)
+
+
+# defining y values
+a = np.exp(x)
+y = np.sin(a)
+
+
+# plott points
+plt.plot(x, y)
+
+
+#x-axis label
+plt.xlabel('x')
+
+#y-axis label
+plt.ylabel('y')
+
+#plot title 
+plt.title('y=sin(exp(x))')
+
+#showing the plot
+plt.show()
