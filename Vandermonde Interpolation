@@ -1,0 +1,131 @@
+import numpy as np
+from numpy import linalg as LA
+import matplotlib.pyplot as plt
+
+
+
+def main():
+    a = -6
+    b = 6
+    n = 35
+    x = np.linspace(a,b,n) #test interval
+    xvals = np.linspace(a,b,100)
+    y1 = vectorizeFunction(f1,x)
+    y2 = vectorizeFunction(f2,x)
+    print(x)
+    print(y1)
+    print(y2)
+        
+    plt.plot(x,y1,color = 'red')
+    plt.title('Test cos(t))', color = 'brown')
+    plt.xlabel('x')
+    plt.ylabel('y1')
+    plt.scatter(x,y1, color = 'blue')
+    plt.show()
+    print("f1(x)")
+    print("__________________________________")
+    
+    yinterp = np.interp(xvals, x, y1)
+    plt.plot(x, y1, 'o')
+    plt.plot(xvals, yinterp, '-x')
+    plt.show()
+    print("f1(x) with interpolation points")
+    print("__________________________________")
+
+    plt.plot(x,y2, color = 'green')
+    plt.title('Test 1/(x^2+1)', color = 'brown')
+    plt.xlabel('x')
+    plt.ylabel('f2')
+    plt.scatter(x,y2, color = 'purple')
+    plt.show()
+    print("f2(x)")
+    print("__________________________________")
+    
+    yinterp = np.interp(xvals, x, y2)
+    plt.plot(x, y2, 'o')
+    plt.plot(xvals, yinterp, '-x')
+    plt.show()
+    print("f2(x) with interpolation points")
+    print("__________________________________")
+    
+    A_matrix = VandermondeMatrix(x)
+    print(A_matrix)
+    print("Vandermonde Matrix")
+    print("__________________________________")
+    
+    #Px1 = LA.solve(A_matrix,f1)
+    #print(Px1)
+    #Px2 = LA.solve(A_matrix,f2)
+    #print(Px2) test using numpy vandermonde command
+    
+    #c = np.vander(x,len(x)) 
+    #print(c)
+    #p1 = LA.solve(c,f1)
+    #print(p1)
+    #p2 = LA.solve(c,f2)
+    #print(p2) test using numpy vandermonde command to see if it matches the solution of def Vandermonde(x):
+        
+    C1 = LA.solve(A_matrix,y1)
+    print(C1)
+    print("Coefficients of f1")
+    print("__________________________________")
+
+    Px1 = np.poly1d(C1)
+    print(Px1)
+    print("P(x)1 polynomial for f1")
+    print("__________________________________")
+
+    plt.plot(x,Px1(x))
+    plt.xlabel('x', color = 'red')
+    plt.ylabel('f1', color = 'orange')
+    plt.title('Test P1(x)', color = 'blue')
+    plt.show()
+    
+    C2 = LA.solve(A_matrix,y2)
+    print(C2)
+    print("Coefficients of f2")
+    print("__________________________________")
+    
+  
+    Px2 = np.poly1d(C2)
+    print(Px2)
+    print("P(x)2 polynomial for f2")
+    print("__________________________________")
+
+    plt.plot(x,Px2(x))
+    plt.xlabel('x', color = 'green')
+    plt.ylabel('f2', color = 'blue')
+    plt.title('Test P2(x)', color = 'red')
+    plt.show()
+    
+def vectorizeFunction(func,xvals):
+    vect = np.zeros(len(xvals))
+    for i,e in enumerate(xvals):
+        vect[i] = func(e)
+    return vect
+       
+
+
+def f1(x): 
+    return np.cos(x)
+  
+
+def f2(x):
+    return 1/(x**2+1)
+    
+    
+    
+def VandermondeMatrix(x):
+    n = len(x)
+    A = np.zeros((n, n))
+    exponent = np.array(range(n-1,-1,-1))
+    for j in range(n):
+        A[j, :] = x[j]**exponent
+    return A
+ 
+if __name__ == "__main__":
+    main()  
+    
+
+
+
