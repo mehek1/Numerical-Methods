@@ -1,0 +1,16 @@
+import numpy as np
+import math as m
+import matplotlib.pyplot as plt
+
+
+N = 360
+R = 5
+t = np.linspace(0,m.pi,N)
+x = R*np.cos(t)
+y = R*np.sin(t)
+
+circle = np.zeros((2,N))
+print(circle.shape)
+circle[0,:] = x
+circle[1,:] = y
+print(circle)
