@@ -1,0 +1,55 @@
+import numpy as np
+from numpy import linalg as LA
+
+x = np.array([[0],[-1]])  # analytical solution
+x0 = np.array([[0],[-4]])
+g = 2-2**.5 #9.81
+m = 1
+s1 = s2 = s = 10
+l1 = l2 = l = 2
+a1 = np.array([[-1],[0]])
+a2 = np.array([[1],[0]])
+G =  np.array([[0],[-g*m]])
+
+def main():
+    #F2 = F(a2,x,s,l)
+    #dF1 = Fp(a1, x, s, l)
+    #print(dF1) 
+   # x = np.array([[0.1],[0.1]])
+    xstar = myNewtonMethod(x0, tol=1E-06)
+    print(xstar)
+
+    
+# defining functions
+def F(a, x, s, l):
+    F = s*(l/LA.norm(x-a)-l)*(x-a) #Original Function
+    return F
+
+def Ftot(x):
+        #F1 = F(a1, x, s1, l1) #Force 1
+        #F2 = F(a2, x, s2, l2) #Force 2
+        Ftot =  F(a1, x, s1, l1) + F(a2, x, s2, l2) + G   #sum of all forces
+        return Ftot 
+        
+
+def Fp(a, x, s, l):
+        n = len(x)
+        Fp = s*(((l/LA.norm(x-a)-1)*np.identity(n)) - (l/LA.norm(x-a)**3)*np.matmul((x-a),np.transpose(x-a)))
+        return Fp  
+    
+def Fptot(x):
+        F1p = Fp(a1, x, s1, l1)
+        F2p = Fp(a2, x, s2, l2)
+        Fptot = F1p + F2p
+        return Fptot 
+    
+    
+def myNewtonMethod(x, tol=1E-06):        
+    while LA.norm(Ftot(x)) > tol  :
+        x = x - np.matmul(LA.inv(Fptot(x)),Ftot(x)) #The Newton-Raphson formula
+    return x
+    print(x)
+
+if __name__ == "__main__":
+    main()
+ 
