@@ -1,0 +1,78 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import pylab as pl
+import math as m
+
+N = 360
+R = 5
+t = np.linspace(0,2*m.pi,N)
+x = R*np.cos(t)
+y = R*np.sin(t)
+
+circle = np.zeros((2,N))
+print(circle.shape)
+circle[0,:] = x
+circle[1,:] = y
+
+
+
+file = open(r'C:\Users\Administrator\Desktop\Numerical DE\duck.txt' , 'r')
+file.read()
+with open(r'C:\Users\Administrator\Desktop\Numerical DE\duck.txt','r') as file:
+    print(file.readline())
+    print(file.readline())
+duck = np.array([[0,1,1,1.5,2.5,3,3,4,2,2,1,-3.7,-5,-4,-3,0],
+[1,0,3.5,4,4,3.5,3,3,2,-1,-2,-2,1,0,1,1]])
+
+pl.plot(duck[0,:],duck[1,:],x,y)
+pl.show()
+
+print("Original duck")
+print("__________________________________")
+
+
+A = np.array([[1,2],[3,4]])
+B = np.matmul(A,duck)
+B2 = np.matmul(A,circle)
+plt.plot(B[0,:],B[1,:],B2[0,:],B2[1,:])
+plt.show()
+
+print("Duck transformation")
+print("__________________________________")
+#define matrix of zeros for circle
+#equation of circle
+
+
+R = ([np.cos(90),-np.sin(90)],[np.sin(90),np.cos(90)])
+C = np.matmul(R,duck)
+C2 = np.matmul(R,circle)
+plt.plot(C[0,:],C[1,:],C2[0,:],C2[1,:])
+plt.show()
+print("Duck Rotation")
+print("__________________________________")
+
+Stretch = np.array([[2,0],[0,2]])
+D = np.matmul(Stretch,duck)
+D2 = np.matmul(Stretch,circle)
+plt.plot(D[0,:],D[1,:],D2[0,:],D2[1,:])
+plt.show()
+print("Duck Stretch")
+print("__________________________________")
+
+Shear = np.array([[1,2],[0,1]])
+E = np.matmul(Shear,duck)
+E2 = np.matmul(Shear,circle)
+plt.plot(E[0,:],E[1,:],E2[0,:],E2[1,:])
+plt.show()
+print("Duck Shear")
+print("__________________________________")
+
+from numpy.linalg import svd
+u, s, v = np.linalg.svd(duck)
+print(u)
+print (s)
+print(v)
+svd = np.dot(v,np.dot(np.diag(u), s))
+print(svd)
+print("Singular Value Decompisition")
+print("__________________________________")
