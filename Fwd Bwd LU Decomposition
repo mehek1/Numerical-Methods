@@ -1,0 +1,35 @@
+import numpy as np
+
+def main():
+    L = np.array([[1,0,0],[-2,1,0],[4,5,1]])
+    b = np.array([18,-3,231])
+    U = np.array([[2,-1,6],[0,3,9],[0,0,-2]])
+  
+    y = forward(L,b)
+    x = backward(U,y)
+    print(y)
+    print(x)
+    
+def forward(L,b):
+    n = L.shape[0]
+    y = np.zeros(n)
+    for k in range(n):
+        y[k]=b[k]   
+        for j in range(k):
+            y[k] = y[k]-L[k,j]*y[j]
+        y[k] = y[k]/L[k,k]
+    return y
+
+def backward(U,y):
+    n = U.shape[0]
+    x = np.zeros(n)
+    for k in range(n-1,-1,-1):
+        x[k] = y[k]
+        for j in range(k+1,n):
+            x[k] = x[k]-U[k,j]*x[j]
+        x[k] = x[k]/U[k,k]
+    return x
+
+   
+if __name__ == "__main__":
+    main()
