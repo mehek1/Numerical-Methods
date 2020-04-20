@@ -1,0 +1,100 @@
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+a = 0 #start point
+b = 50 #end point
+h_test1 = 0.1
+h_test2 = 0.2
+h_test3 = 0.5
+x0 = 0
+y0 = 1 
+x = np.linspace(a,b)
+
+def main():
+    
+    print(solvercompare(h)) #telling main to print plots from the definition
+    
+def solvercompare(h):
+    #Euler Method
+    for h in [h_test1,h_test2,h_test3]:
+        y=[];
+        for j in range(len(x)):
+            y.append(Euler_Method(x0, y0, h, x[j]));
+        plt.plot(x,y);
+    plt.plot(x,np.exp(np.sin(x)));
+    plt.legend(['at step size h=0.1',' at step size h=0.2',' at step size h=0.5','Actual Function']);
+    plt.title('Euler Method', color = 'indigo');
+    plt.xlabel('x-interval', color = 'dodgerblue');
+    plt.ylabel('y-value apporximations', color = 'fuchsia');
+    plt.scatter(x,y, color = 'aqua');
+    plt.scatter(x,np.exp(np.sin(x)), color = 'lawngreen');
+    plt.show();
+    
+    #Heun Method
+    for h in [h_test1,h_test2,h_test3]:
+        y=[]; 
+        for j in range(len(x)):
+            y.append(Heun_Method(x0, y0, h, x[j]));
+        plt.plot(x,y);
+    plt.plot(x,np.exp(np.sin(x)));
+    plt.legend(['at step size h=0.1',' at step size h=0.2',' at step size h=0.5','Actual Function']);
+    plt.title('Heun Method', color = 'purple');
+    plt.xlabel('x-interval', color = 'dodgerblue');
+    plt.ylabel('y-value apporximations', color = 'fuchsia');
+    plt.scatter(x,y, color = 'aqua');
+    plt.scatter(x,np.exp(np.sin(x)), color = 'lawngreen');
+    plt.show();
+    
+
+    #Collatz Method
+    for h in [h_test1,h_test2,h_test3]:
+        y=[]; 
+        for j in range(len(x)):
+            y.append(Collatz_Method(x0, y0, h, x[j]));
+        plt.plot(x,y);
+    plt.plot(x,np.exp(np.sin(x)));
+    plt.legend(['at step size h=0.1',' at step size h=0.2',' at step size h=0.5','Actual Function']);
+    plt.title('Collatz Method', color = 'purple');
+    plt.xlabel('x-interval', color = 'dodgerblue');
+    plt.ylabel('y-value apporximations', color = 'fuchsia');
+    plt.scatter(x,y, color = 'aqua');
+    plt.scatter(x,np.exp(np.sin(x)), color = 'lawngreen');
+    plt.show();
+    
+    
+    
+def Analytical_Solution(t): #Given Solution 
+    return np.exp(np.sin(t))
+    
+def ODE_func(t,y): #Ordinary Differential Equation
+    return np.cos(t)*y
+
+
+def Euler_Method(x0, y, h, x ):  #Euler Explicit Method Formula
+     while x0 < x: #created while-loops for iteration to approximate points
+         y = y + h * ODE_func(x0, y) #directly typed in formula
+         x0 = x0 + h          
+     return y 
+
+def Heun_Method(x0, y, h, x ): #Heun Method Formula  
+    while x0 < x: 
+       y1 = y + (h/2)*(ODE_func(x0,y)+ODE_func(x0+h,y+h*ODE_func(x0,y)))
+       y = y1
+       x0 = x0 + h
+    return y
+
+
+def Collatz_Method(x0, y, h, x ): #Collatz Method Formula 
+    while x0 < x: 
+       y1 = y + h*ODE_func(x0+h/2,y+h/2*ODE_func(x0,y))
+       y = y1
+       x0 = x0 + h
+    return y
+
+
+    
+if __name__ == "__main__":
+        main()     
+        
