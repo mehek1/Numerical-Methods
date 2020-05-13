@@ -1,0 +1,76 @@
+'''Modeling Advection-Diffusion Equation in a non-interacting material in 1D'''
+'''Mehek Ahmed and Colin Wadsworth'''
+
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+
+
+T = 20.0 #time
+X = 10.0 #position 
+n = 300 #columns
+m = 300 #rows
+#positions of time and space, xp= x position accross grid, tp = t position accross grid
+tp = T / (n - 1)
+xp = X / (m - 1)
+C = 0.5 
+U = np.zeros((n, m))
+
+def main(): 
+    
+    plt.xlabel('x: position')
+    plt.ylabel('u: u(x, t)')
+    plt.title(r'$\frac{\partial u}{\partial t} + C \frac{\partial u}{\partial x} = 0$')    
+    plt.savefig('transport-equation')
+    plt.style.use('dark_background')
+
+
+
+    for i in range(0, n):  
+        U[i, 0] = np.exp(- (i * xp - 2.5) ** 2)
+    
+    
+    for i in range(1, n): # across x
+        for j in range(1, m): # across t
+            U[i, j] = (xp * U[i, j - 1] + C * tp * U[i - 1, j]) / (xp + C * tp) # equation for new distrution value
+     
+    fig = plt.figure(1)
+    
+    #gives time position instead of time step
+    tn = np.zeros((m, 1))
+    for j in range(0, m):
+        tn[j] = j * tp
+    
+    #gives x position instead of x step
+    xn = np.zeros((n, 1))
+    for j in range(0, n):
+        xn[j] = j * xp
+    
+    for i in [0, 20, 40, 60, 80, 100, 299 ]: # selects which position of time 
+        label = 't = ' + str(tn[i][0]) # lables legend
+        subfig = fig.add_subplot(1, 1, 1)
+        subfig.plot(xn, U[:, i], label=label)
+        subfig.legend()
+        subfig.grid(True)
+        print(tn)
+        
+    #Animating the wave graph
+    figure_two = plt.figure()
+    axis   = figure_two.add_subplot(1,1,1)
+    axis.grid(True)
+    label  = 't = ' + str(tn[i][0])
+    plots  = axis.plot(xn,U[:,0],label=label)
+
+    def animation_function(frame):       
+        frame %= 300                    
+        plots[0].set_ydata(U[:,frame]) 
+        return plots                   
+ 
+    ani = animation.FuncAnimation(figure_two,animation_function,interval=10,blit=True)
+    print(ani)
+
+
+
+if __name__ == "__main__":
+    main()
+    
